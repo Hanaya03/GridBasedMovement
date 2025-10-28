@@ -3,8 +3,9 @@ using UnityEngine.InputSystem;
 
 public class TileSelector : MonoBehaviour
 {
-    [SerializeField] private GridPhysics targetUnit;
+    [SerializeField] private UnitController targetUnit;
     [SerializeField] private LayerMask groundLayer;
+    private PathUtility _pathTool;
     private Ray ray;
     private RaycastHit hit;
     private InputSystem_Actions controls;
@@ -18,6 +19,8 @@ public class TileSelector : MonoBehaviour
     
     private void Awake()
     {
+        _pathTool = new PathUtility();
+        _pathTool.Source = targetUnit.Position;
         controls = new InputSystem_Actions();
     }
 
@@ -37,11 +40,15 @@ public class TileSelector : MonoBehaviour
     {
         Debug.Log("input");
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out hit)){
+        if (Physics.Raycast(ray, out hit)) {
             Debug.Log("hit, layer: " + hit.transform.gameObject.layer);
             Debug.Log("target layer: " + groundLayer);
-            if(hit.transform.gameObject.layer != groundLayer)
-                targetUnit.Move(hit.transform.position.x, hit.transform.position.z);
+            if (hit.transform.gameObject.layer != groundLayer)
+            {
+                targetUnit.Move(new Vector2((int)hit.transform.position.x, (int)hit.transform.position.z));
+                _pathTool.AddToPath(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
+            }
+                // targetUnit.SetDestination(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
         }
         // targetUnit.Move();
     }
