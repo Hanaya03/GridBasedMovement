@@ -1,15 +1,9 @@
 using UnityEngine;
+using System.Collections;
 
 public class UnitController : MonoBehaviour
 {
-    [SerializeField] private GridPhysics phys;
-    [SerializeField] private Map map;
-    private int[] steps;
-    private Coords _target;
-    private Coords _projected;
-    private Coords _position = new Coords(0, 0);
-    public Coords Position => _position;
-    public Coords Target { set { _target = value; } }
+    [SerializeField]private float _stepTime = .2f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,24 +16,31 @@ public class UnitController : MonoBehaviour
 
     }
 
-    public void SetPath()
-    {
-        
-    }
-
     public void SetDestination(Coords destination)
     {
-        _target = destination;
-
-        _projected = _position;
         // while (_projected.X != _target.X | _projected.Y != _target.Y)
         // {
 
         // }
     }
-    
-    public void Move(Vector2 targetPos)
+
+    public void Move(Vector3 targetPos)
     {
+        targetPos.z = 1;
         transform.position = targetPos;
+    }
+
+    public void FollowPath(Vector2[] steps)
+    {
+        StartCoroutine(TakeSteps(steps));
+    }
+    
+    IEnumerator TakeSteps(Vector2[] steps)
+    {
+        for(int i = 0; i < steps.Length; i++)
+        {
+            yield return new WaitForSeconds(_stepTime);
+            transform.position += (Vector3)steps[i];
+        }
     }
 }

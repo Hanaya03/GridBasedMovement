@@ -20,7 +20,7 @@ public class TileSelector : MonoBehaviour
     private void Awake()
     {
         _pathTool = new PathUtility();
-        _pathTool.Source = targetUnit.Position;
+        _pathTool.Source = targetUnit.transform.position;
         controls = new InputSystem_Actions();
     }
 
@@ -40,16 +40,22 @@ public class TileSelector : MonoBehaviour
     {
         Debug.Log("input");
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit)) {
+        if (Physics.Raycast(ray, out hit))
+        {
             Debug.Log("hit, layer: " + hit.transform.gameObject.layer);
             Debug.Log("target layer: " + groundLayer);
             if (hit.transform.gameObject.layer != groundLayer)
             {
-                targetUnit.Move(new Vector2((int)hit.transform.position.x, (int)hit.transform.position.z));
-                _pathTool.AddToPath(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
+                // targetUnit.Move(hit.transform.position);
+                _pathTool.AddToPath(hit.transform.position);
             }
-                // targetUnit.SetDestination(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
+            // targetUnit.SetDestination(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
         }
         // targetUnit.Move();
+    }
+    
+    public void SubmitPath()
+    {
+        targetUnit.FollowPath(_pathTool.Path);
     }
 }

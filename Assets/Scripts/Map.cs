@@ -3,7 +3,7 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
     [SerializeField] private GameObject tilePF;
-    private Vector3 pos = Vector3.zero;
+    private Vector2 pos = Vector2.zero;
     public int[,] map = {{1, 1, 1, 1, 1, 1, 1, 1},
                          {1, 0, 0, 1, 1, 0, 0, 1},
                          {1, 1, 1, 1, 1, 1, 1, 1},
@@ -21,7 +21,7 @@ public class Map : MonoBehaviour
                 if (map[i,j] == 1)
                 {
                     pos.x = i;
-                    pos.z = j;
+                    pos.y = j;
                     Instantiate(tilePF, pos, Quaternion.identity, gameObject.transform);
                 }
             }
