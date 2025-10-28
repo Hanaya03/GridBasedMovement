@@ -12,7 +12,7 @@ public class PathUtility
     public void AddToPath(Vector2 target)
     {
         Vector2 tmp = _source;
-        if(_pidx != 0 && _pidx != _path.Length){ tmp = _path[_pidx]; }
+        if(_pidx != 0 && _pidx != _path.Length){ tmp = _path[_pidx - 1]; }
         if ((tmp.x != target.x && tmp.y != target.y) || (tmp == target))
         {
             Debug.Log("invalid target");
@@ -37,7 +37,9 @@ public class PathUtility
         {
             if (_pidx == _path.Length)
                 return;
-            _path[_pidx] = dir;
+                
+            if (_pidx == 0) { _path[_pidx] = _source + dir; }
+            else { _path[_pidx] = _path[_pidx - 1] + dir; }
             _pidx++;
         }
     }

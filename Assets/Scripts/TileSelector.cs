@@ -38,6 +38,7 @@ public class TileSelector : MonoBehaviour
 
     private void HandleIn()
     {
+        _pathTool.Source = targetUnit.transform.position;
         Debug.Log("input");
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
@@ -47,7 +48,7 @@ public class TileSelector : MonoBehaviour
             if (hit.transform.gameObject.layer != groundLayer)
             {
                 // targetUnit.Move(hit.transform.position);
-                _pathTool.AddToPath(hit.transform.position);
+                _pathTool.AddToPath((Vector2)hit.transform.position);
             }
             // targetUnit.SetDestination(new Coords((int)hit.transform.position.x, (int)hit.transform.position.z));
         }

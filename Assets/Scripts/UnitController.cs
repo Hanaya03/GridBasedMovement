@@ -40,7 +40,7 @@ public class UnitController : MonoBehaviour
         for(int i = 0; i < steps.Length; i++)
         {
             yield return new WaitForSeconds(_stepTime);
-            transform.position += (Vector3)steps[i];
+            transform.position = (Vector3)steps[i] + Vector3.forward;
         }
     }
 }
