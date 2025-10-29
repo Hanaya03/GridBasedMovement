@@ -30,17 +30,17 @@ public class UnitController : MonoBehaviour
         transform.position = targetPos;
     }
 
-    public void FollowPath(Vector2[] steps)
+    public void FollowPath((Vector2[], int)steps)
     {
         StartCoroutine(TakeSteps(steps));
     }
     
-    IEnumerator TakeSteps(Vector2[] steps)
+    IEnumerator TakeSteps((Vector2[], int) steps)
     {
-        for(int i = 0; i < steps.Length; i++)
+        for(int i = 0; i < steps.Item2; i++)
         {
             yield return new WaitForSeconds(_stepTime);
-            transform.position = (Vector3)steps[i] + Vector3.forward;
+            transform.position = (Vector3)steps.Item1[i] + Vector3.forward;
         }
     }
 }

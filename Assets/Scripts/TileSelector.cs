@@ -58,5 +58,6 @@ public class TileSelector : MonoBehaviour
     public void SubmitPath()
     {
         targetUnit.FollowPath(_pathTool.Path);
+        _pathTool.ClearPath();
     }
 }

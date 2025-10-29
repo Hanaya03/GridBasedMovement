@@ -7,10 +7,11 @@ public class PathUtility
     public Vector2 Source { set { _source = value; } }
     private int _pidx = 0;
     private Vector2[] _path = new Vector2[5];
-    public Vector2[] Path => _path;
+    public (Vector2[], int) Path => (_path, _pidx);
 
     public void AddToPath(Vector2 target)
     {
+        Debug.Log($"_source is {_source}, pidx = {_pidx}");
         Vector2 tmp = _source;
         if(_pidx != 0 && _pidx != _path.Length){ tmp = _path[_pidx - 1]; }
         if ((tmp.x != target.x && tmp.y != target.y) || (tmp == target))
@@ -30,17 +31,22 @@ public class PathUtility
             else{ DrawLine(Vector2.left, (int)( tmp.x - target.x)); }
         }
     }
-    
+
     private void DrawLine(Vector2 dir, int steps)
     {
-        for(int i = 0; i < steps; i++)
+        for (int i = 0; i < steps; i++)
         {
             if (_pidx == _path.Length)
                 return;
-                
+
             if (_pidx == 0) { _path[_pidx] = _source + dir; }
             else { _path[_pidx] = _path[_pidx - 1] + dir; }
             _pidx++;
         }
+    }
+    
+    public void ClearPath()
+    {
+        _pidx = 0;
     }
 }
