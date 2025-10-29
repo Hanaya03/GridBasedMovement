@@ -5,6 +5,7 @@ public class TileSelector : MonoBehaviour
 {
     [SerializeField] private UnitController targetUnit;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Map _grid;
     private PathUtility _pathTool;
     private Ray ray;
     private RaycastHit hit;
@@ -21,6 +22,7 @@ public class TileSelector : MonoBehaviour
     {
         _pathTool = new PathUtility();
         _pathTool.Source = targetUnit.transform.position;
+        _pathTool._map = _grid.map;
         controls = new InputSystem_Actions();
     }
 

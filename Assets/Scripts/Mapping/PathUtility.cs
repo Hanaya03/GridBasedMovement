@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class PathUtility
 {
+    public int[,] _map = new int[8,8];
     private Vector2 _source;
     public Vector2 Source { set { _source = value; } }
     private int _pidx = 0;
@@ -34,13 +35,23 @@ public class PathUtility
 
     private void DrawLine(Vector2 dir, int steps)
     {
+        Vector2 _step = _source + dir;
         for (int i = 0; i < steps; i++)
         {
             if (_pidx == _path.Length)
                 return;
+            
 
-            if (_pidx == 0) { _path[_pidx] = _source + dir; }
-            else { _path[_pidx] = _path[_pidx - 1] + dir; }
+            if (_pidx == 0)
+            {
+                if(_map[(int)_step.x,(int)_step.y] == 0){ return; }
+                _path[_pidx] = _step; 
+            }else
+            {
+                _step = _path[_pidx - 1] + dir;
+                if(_map[(int)_step.x,(int)_step.y] == 0){ return; }
+                _path[_pidx] = _step;
+            }
             _pidx++;
         }
     }
