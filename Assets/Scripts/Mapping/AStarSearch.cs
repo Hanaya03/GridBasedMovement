@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -28,27 +29,27 @@ public class AStarSearch
     // A Function to find the shortest path between
     // a given source cell to a destination cell according
     // to A* Search Algorithm
-    public static void AStar(int[,] grid, Pair src, Pair dest)
+    public static void AStar(int[,] grid, Vector2 src, Vector2 dest)
     {
         int ROW = grid.GetLength(0);
         int COL = grid.GetLength(1);
 
         // If the source or destination is out of range
-        if (!IsValid(src.first, src.second, ROW, COL) || !IsValid(dest.first, dest.second, ROW, COL))
+        if (!IsValid(src.x, src.y, ROW, COL) || !IsValid(dest.x, dest.y, ROW, COL))
         {
             Console.WriteLine("Source or destination is invalid");
             return;
         }
 
         // Either the source or the destination is blocked
-        if (!IsUnBlocked(grid, src.first, src.second) || !IsUnBlocked(grid, dest.first, dest.second))
+        if (!IsUnBlocked(grid, src.x, src.y) || !IsUnBlocked(grid, dest.x, dest.y))
         {
             Console.WriteLine("Source or the destination is blocked");
             return;
         }
 
         // If the destination cell is the same as the source cell
-        if (src.first == dest.first && src.second == dest.second)
+        if (src.x == dest.x && src.y == dest.y)
         {
             Console.WriteLine("We are already at the destination");
             return;
@@ -76,7 +77,7 @@ public class AStarSearch
         }
 
         // Initialising the parameters of the starting node
-        int x = src.first, y = src.second;
+        int x = (int)src.x, y = (int)src.y;
         cellDetails[x, y].f = 0.0;
         cellDetails[x, y].g = 0.0;
         cellDetails[x, y].h = 0.0;
@@ -179,7 +180,7 @@ public class AStarSearch
 
     // A Utility Function to check whether given cell (row, col)
     // is a valid cell or not.
-    public static bool IsValid(int row, int col, int ROW, int COL)
+    public static bool IsValid(float row, float col, int ROW, int COL)
     {
         // Returns true if row number and column number
         // is in range
@@ -188,82 +189,54 @@ public class AStarSearch
 
     // A Utility Function to check whether the given cell is
     // blocked or not
-    public static bool IsUnBlocked(int[,] grid, int row, int col)
+    public static bool IsUnBlocked(int[,] grid, float row, float col)
     {
         // Returns true if the cell is not blocked else false
-        return grid[row, col] == 1;
+        return grid[(int)row, (int)col] == 1;
     }
 
     // A Utility Function to check whether destination cell has
     // been reached or not
-    public static bool IsDestination(int row, int col, Pair dest)
+    public static bool IsDestination(int row, int col, Vector2 dest)
     {
-        return (row == dest.first && col == dest.second);
+        return row == (int)dest.x && col == (int)dest.y;
     }
 
     // A Utility Function to calculate the 'h' heuristics.
-    public static double CalculateHValue(int row, int col, Pair dest)
+    public static double CalculateHValue(int row, int col, Vector2 dest)
     {
         // Return using the distance formula
-        return Math.Sqrt(Math.Pow(row - dest.first, 2) + Math.Pow(col - dest.second, 2));
+        return Math.Sqrt(Math.Pow(row - (int)dest.x, 2) + Math.Pow(col - (int)dest.y, 2));
     }
 
     // A Utility Function to trace the path from the source
     // to destination
-    public static void TracePath(Cell[,] cellDetails, Pair dest)
+    public static void TracePath(Cell[,] cellDetails, Vector2 dest)
     {
         Console.WriteLine("\nThe Path is ");
         int ROW = cellDetails.GetLength(0);
         int COL = cellDetails.GetLength(1);
 
-        int row = dest.first;
-        int col = dest.second;
+        int row = (int)dest.x;
+        int col = (int)dest.y;
 
-        Stack<Pair> Path = new Stack<Pair>();
+        Stack<Vector2> Path = new Stack<Vector2>();
 
         while (!(cellDetails[row, col].parent_i == row && cellDetails[row, col].parent_j == col))
         {
-            Path.Push(new Pair(row, col));
+            Path.Push(new Vector2(row, col));
             int temp_row = cellDetails[row, col].parent_i;
             int temp_col = cellDetails[row, col].parent_j;
             row = temp_row;
             col = temp_col;
         }
 
-        Path.Push(new Pair(row, col));
+        Path.Push(new Vector2(row, col));
         while (Path.Count > 0)
         {
-            Pair p = Path.Peek();
+            Vector2 p = Path.Peek();
             Path.Pop();
-            Console.Write(" -> ({0},{1}) ", p.first, p.second);
+            Console.Write(" -> ({0},{1}) ", p.x, p.y);
         }
-    }
-
-    // Driver method
-    public static void Main(string[] args)
-    {
-        /* Description of the Grid-
-            1--> The cell is not blocked
-            0--> The cell is blocked */
-        int[,] grid =
-        {
-            {1, 0, 1, 1, 1, 1, 0, 1, 1, 1},
-            {1, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-            {1, 1, 1, 0, 1, 1, 0, 1, 0, 1},
-            {0, 0, 1, 0, 1, 0, 0, 0, 0, 1},
-            {1, 1, 1, 0, 1, 1, 1, 0, 1, 0},
-            {1, 0, 1, 1, 1, 1, 0, 1, 0, 0},
-            {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-            {1, 0, 1, 1, 1, 1, 0, 1, 1, 1},
-            {1, 1, 1, 0, 0, 0, 1, 0, 0, 1}
-        };
-
-        // Source is the left-most bottom-most corner
-        Pair src = new Pair(8, 0);
-
-        // Destination is the left-most top-most corner
-        Pair dest = new Pair(0, 0);
-
-        AStar(grid, src, dest);
     }
 }
