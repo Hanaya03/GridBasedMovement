@@ -12,9 +12,12 @@ public class Map : MonoBehaviour
                          {1, 1, 1, 1, 1, 1, 1, 1},
                          {1, 0, 0, 1, 1, 0, 0, 1},
                          {1, 1, 1, 1, 1, 1, 1, 1}};
+    public Tile[,] SMap = new Tile[8, 8];
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameObject tmp;
         for (int i = 0; i < map.GetLength(0); i++) {
             for (int j = 0; j < map.GetLength(1); j++)
             {
@@ -22,7 +25,8 @@ public class Map : MonoBehaviour
                 {
                     pos.x = i;
                     pos.y = j;
-                    Instantiate(tilePF, pos, Quaternion.identity, gameObject.transform);
+                    tmp = Instantiate(tilePF, pos, Quaternion.identity, gameObject.transform);
+                    SMap[i, j] = tmp.GetComponent<Tile>();
                 }
             }
         }

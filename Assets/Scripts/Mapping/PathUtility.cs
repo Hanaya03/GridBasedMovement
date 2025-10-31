@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 public class PathUtility
 {
-    public int[,] _map = new int[8,8];
+    public int[,] _map = new int[8, 8];
+    public Tile[,] _smap = new Tile[8, 8];
     private Vector2 _source;
-    public Vector2 Source { set { _source = value; } }
+    public Vector2 Source { get { return _source; } set { _source = value; } }
     private int _pidx = 0;
-    private List<Vector2> _path;
+    private List<Vector2> _path = new List<Vector2>();
     public List<Vector2> Path => _path;
 
     public void AddToPath(Vector2 target)
@@ -15,50 +16,21 @@ public class PathUtility
         Debug.Log($"_source is {_source}, pidx = {_pidx}");
         Vector2 tmp = _source;
 
-        // if (_pidx != 0 && _pidx != _path.Length) { tmp = _path[_pidx - 1]; }
-
-        // if ((tmp.x != target.x && tmp.y != target.y) || (tmp == target))
-        // {
-        //     Debug.Log("invalid target");
-        //     return;
-        // }
-
         _path = AStarSearch.AStar(_map, _source, target);
 
-        // if(tmp.x == target.x)
-        // {
-        //     if (tmp.y < target.y) { DrawLine(Vector2.up, (int)(target.y- tmp.y)); }
-        //     else{ DrawLine(Vector2.down, (int)( tmp.y - target.y)); }
-        // }
-        // else
-        // {
-        //     if (tmp.x < target.x) { DrawLine(Vector2.right, (int)(target.x- tmp.x)); }
-        //     else{ DrawLine(Vector2.left, (int)( tmp.x - target.x)); }
-        // }
+        for (int v = 0; v < _path.Count; v++)
+        {
+            _smap[(int)_path[v].x, (int)_path[v].y].HighlightPathTile();
+        }
     }
-
-    // private void DrawLine(Vector2 dir, int steps)
-    // {
-    //     Vector2 _step = _source + dir;
-    //     for (int i = 0; i < steps; i++)
-    //     {
-    //         if (_pidx == _path.Length)
-    //             return;
-            
-
-    //         if (_pidx == 0)
-    //         {
-    //             if(_map[(int)_step.x,(int)_step.y] == 0){ return; }
-    //             _path[_pidx] = _step; 
-    //         }else
-    //         {
-    //             _step = _path[_pidx - 1] + dir;
-    //             if(_map[(int)_step.x,(int)_step.y] == 0){ return; }
-    //             _path[_pidx] = _step;
-    //         }
-    //         _pidx++;
-    //     }
-    // }
+    
+    public void ErasePathHighlights()
+    {
+        for (int v = 0; v < _path.Count; v++)
+        {
+            _smap[(int)_path[v].x, (int)_path[v].y].DehighlightPathTile();
+        }
+    }
     
     public void ClearPath()
     {
