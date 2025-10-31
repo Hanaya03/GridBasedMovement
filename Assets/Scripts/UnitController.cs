@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UnitController : MonoBehaviour
 {
@@ -30,17 +31,17 @@ public class UnitController : MonoBehaviour
         transform.position = targetPos;
     }
 
-    public void FollowPath((Vector2[], int)steps)
+    public void FollowPath(List<Vector2> steps)
     {
         StartCoroutine(TakeSteps(steps));
     }
     
-    IEnumerator TakeSteps((Vector2[], int) steps)
+    IEnumerator TakeSteps(List<Vector2> steps)
     {
-        for(int i = 0; i < steps.Item2; i++)
+        for(int i = 0; i < steps.Count; i++)
         {
             yield return new WaitForSeconds(_stepTime);
-            transform.position = (Vector3)steps.Item1[i] + Vector3.forward;
+            transform.position = (Vector3)steps[i] + Vector3.forward;
         }
     }
 }

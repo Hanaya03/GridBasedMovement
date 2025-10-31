@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class AStarSearch
 {
+    private static Vector2[] identities = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
     // Creating a shortcut for KeyValuePair<int, int>
     public struct Pair
     {
@@ -29,7 +30,7 @@ public class AStarSearch
     // A Function to find the shortest path between
     // a given source cell to a destination cell according
     // to A* Search Algorithm
-    public static void AStar(int[,] grid, Vector2 src, Vector2 dest)
+    public static List<Vector2> AStar(int[,] grid, Vector2 src, Vector2 dest)
     {
         int ROW = grid.GetLength(0);
         int COL = grid.GetLength(1);
@@ -37,22 +38,22 @@ public class AStarSearch
         // If the source or destination is out of range
         if (!IsValid(src.x, src.y, ROW, COL) || !IsValid(dest.x, dest.y, ROW, COL))
         {
-            Console.WriteLine("Source or destination is invalid");
-            return;
+            Debug.Log("Source or destination is invalid");
+            return null;
         }
 
         // Either the source or the destination is blocked
         if (!IsUnBlocked(grid, src.x, src.y) || !IsUnBlocked(grid, dest.x, dest.y))
         {
-            Console.WriteLine("Source or the destination is blocked");
-            return;
+            Debug.Log("Source or the destination is blocked");
+            return null;
         }
 
         // If the destination cell is the same as the source cell
         if (src.x == dest.x && src.y == dest.y)
         {
-            Console.WriteLine("We are already at the destination");
-            return;
+            Debug.Log("We are already at the destination");
+            return null;
         }
 
         // Create a closed list and initialise it to false which
@@ -94,7 +95,18 @@ public class AStarSearch
             We use a custom comparer to compare tuples based on their f values.
         */
         SortedSet<(double, Pair)> openList = new SortedSet<(double, Pair)>(
-            Comparer<(double, Pair)>.Create((a, b) => a.Item1.CompareTo(b.Item1)));
+            Comparer<(double, Pair)>.Create((a, b) =>
+            {
+                int cmp = a.Item1.CompareTo(b.Item1);
+                if (cmp == 0)
+                {
+                    // Break ties by coordinates to avoid duplicates
+                    cmp = a.Item2.first.CompareTo(b.Item2.first);
+                    if (cmp == 0)
+                        cmp = a.Item2.second.CompareTo(b.Item2.second);
+                }
+                return cmp;
+            }));
 
         // Put the starting cell on the open list and set its
         // 'f' as 0
@@ -114,55 +126,51 @@ public class AStarSearch
             y = p.pair.second;
             closedList[x, y] = true;
 
-            // Generating all the 8 successors of this cell
-            for (int i = -1; i <= 1; i++)
+            // Generating all the 4 successors of this cell
+            for (int v = 0; v <= 3; v++)
             {
-                for (int j = -1; j <= 1; j++)
+                if (identities[v].x == 0f && identities[v].y == 0f)
+                    continue;
+
+                int newX = x + (int)identities[v].x;
+                int newY = y + (int)identities[v].y;
+
+                // If this successor is a valid cell
+                if (IsValid(newX, newY, ROW, COL))
                 {
-                    if (i == 0 && j == 0)
-                        continue;
-
-                    int newX = x + i;
-                    int newY = y + j;
-
-                    // If this successor is a valid cell
-                    if (IsValid(newX, newY, ROW, COL))
+                    // If the destination cell is the same as the
+                    // current successor
+                    if (IsDestination(newX, newY, dest))
                     {
-                        // If the destination cell is the same as the
-                        // current successor
-                        if (IsDestination(newX, newY, dest))
+                        cellDetails[newX, newY].parent_i = x;
+                        cellDetails[newX, newY].parent_j = y;
+                        Debug.Log("The destination cell is found");
+                        foundDest = true;
+                        return TracePath(cellDetails, dest);
+                    }
+
+                    // If the successor is already on the closed
+                    // list or if it is blocked, then ignore it.
+                    if (!closedList[newX, newY] && IsUnBlocked(grid, newX, newY))
+                    {
+                        double gNew = cellDetails[x, y].g + 1.0;
+                        double hNew = CalculateHValue(newX, newY, dest);
+                        double fNew = gNew + hNew;
+
+                        // If it isn’t on the open list, add it to
+                        // the open list. Make the current square
+                        // the parent of this square. Record the
+                        // f, g, and h costs of the square cell
+                        if (cellDetails[newX, newY].f == double.MaxValue || cellDetails[newX, newY].f > fNew)
                         {
+                            openList.Add((fNew, new Pair(newX, newY)));
+
+                            // Update the details of this cell
+                            cellDetails[newX, newY].f = fNew;
+                            cellDetails[newX, newY].g = gNew;
+                            cellDetails[newX, newY].h = hNew;
                             cellDetails[newX, newY].parent_i = x;
                             cellDetails[newX, newY].parent_j = y;
-                            Console.WriteLine("The destination cell is found");
-                            TracePath(cellDetails, dest);
-                            foundDest = true;
-                            return;
-                        }
-
-                        // If the successor is already on the closed
-                        // list or if it is blocked, then ignore it.
-                        if (!closedList[newX, newY] && IsUnBlocked(grid, newX, newY))
-                        {
-                            double gNew = cellDetails[x, y].g + 1.0;
-                            double hNew = CalculateHValue(newX, newY, dest);
-                            double fNew = gNew + hNew;
-
-                            // If it isn’t on the open list, add it to
-                            // the open list. Make the current square
-                            // the parent of this square. Record the
-                            // f, g, and h costs of the square cell
-                            if (cellDetails[newX, newY].f == double.MaxValue || cellDetails[newX, newY].f > fNew)
-                            {
-                                openList.Add((fNew, new Pair(newX, newY)));
-
-                                // Update the details of this cell
-                                cellDetails[newX, newY].f = fNew;
-                                cellDetails[newX, newY].g = gNew;
-                                cellDetails[newX, newY].h = hNew;
-                                cellDetails[newX, newY].parent_i = x;
-                                cellDetails[newX, newY].parent_j = y;
-                            }
                         }
                     }
                 }
@@ -175,7 +183,8 @@ public class AStarSearch
         // there is no way to destination cell (due to
         // blockages)
         if (!foundDest)
-            Console.WriteLine("Failed to find the Destination Cell");
+            Debug.Log("Failed to find the Destination Cell");
+        return null;
     }
 
     // A Utility Function to check whether given cell (row, col)
@@ -211,32 +220,25 @@ public class AStarSearch
 
     // A Utility Function to trace the path from the source
     // to destination
-    public static void TracePath(Cell[,] cellDetails, Vector2 dest)
+    public static List<Vector2> TracePath(Cell[,] cellDetails, Vector2 dest)
     {
-        Console.WriteLine("\nThe Path is ");
-        int ROW = cellDetails.GetLength(0);
-        int COL = cellDetails.GetLength(1);
-
+        List<Vector2> path = new List<Vector2>();
         int row = (int)dest.x;
         int col = (int)dest.y;
 
-        Stack<Vector2> Path = new Stack<Vector2>();
-
         while (!(cellDetails[row, col].parent_i == row && cellDetails[row, col].parent_j == col))
         {
-            Path.Push(new Vector2(row, col));
+            path.Add(new Vector2(row, col));
             int temp_row = cellDetails[row, col].parent_i;
             int temp_col = cellDetails[row, col].parent_j;
             row = temp_row;
             col = temp_col;
         }
 
-        Path.Push(new Vector2(row, col));
-        while (Path.Count > 0)
-        {
-            Vector2 p = Path.Peek();
-            Path.Pop();
-            Console.Write(" -> ({0},{1}) ", p.x, p.y);
-        }
+        path.Add(new Vector2(row, col));
+        path.Reverse();
+
+        Debug.Log($"Path found with {path.Count} steps");
+        return path;
     }
 }
