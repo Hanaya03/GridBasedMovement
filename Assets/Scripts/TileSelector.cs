@@ -20,19 +20,34 @@ public enum ETurnItems
 
 public class TileSelector : MonoBehaviour
 {
-    private Dictionary<ETurnItems, BTurnItems<ETurnItems>> _states = new Dictionary<ETurnItems, BTurnItems<ETurnItems>>();
-    private ETurnItems _currentState;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Map _grid;
-    private bool _pathLocked = false;
-    // private PathUtility _pathTool;
-    
+    private Dictionary<ETurnItems, BTurnItems> _states = new Dictionary<ETurnItems, BTurnItems>();
+    private BTurnItems _currentState;
+    private bool _inTransitioningState = false;
     private InputSystem_Actions controls;
     private InputAction _enter;
 
     void Update()
     {
-        _states[_currentState].UpdateState();
+        ETurnItems nextStateKey = _currentState.GetNextState();
+
+        if (!_inTransitioningState && nextStateKey.Equals(_currentState.StateKey))
+        {
+            _currentState.UpdateState();
+        }
+        else
+        {
+            TransitionToState(nextStateKey);
+        }
+    }
+    
+    private void TransitionToState(ETurnItems Statekey){
+        _inTransitioningState = true;
+        _currentState.ExitState();
+        _currentState = _states[Statekey];
+        _currentState.EnterState();
+        _inTransitioningState = false;
     }
 
     private void Awake()
@@ -44,7 +59,7 @@ public class TileSelector : MonoBehaviour
         _states.Add(ETurnItems.PathSelection, new PathSelection(ETurnItems.CharacterSelection, _data));
         _states.Add(ETurnItems.Waiting, new Waiting(ETurnItems.Waiting, _data));
 
-        _currentState = ETurnItems.CharacterSelection;
+        _currentState = _states[ETurnItems.CharacterSelection];
         
         PathUtility.Map = _grid.map;
         PathUtility.SMap = _grid.SMap;
@@ -55,7 +70,7 @@ public class TileSelector : MonoBehaviour
     {
         _enter = controls.UI.Click;
         _enter.Enable();
-        _enter.canceled += ctx => _states[_currentState].OnLeftClick();
+        _enter.canceled += ctx => _currentState.OnLeftClick();
     }
 
     private void OnDisable()

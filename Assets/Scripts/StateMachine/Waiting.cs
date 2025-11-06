@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Waiting : BTurnItems<ETurnItems>
+public class Waiting : BTurnItems
 {
     public Waiting(ETurnItems stateKey, StateData Data) : base(stateKey, Data)
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ActionSelection : BTurnItems<ETurnItems>
+public class ActionSelection : BTurnItems
 {
     public ActionSelection(ETurnItems stateKey, StateData Data) : base(stateKey, Data)
     {

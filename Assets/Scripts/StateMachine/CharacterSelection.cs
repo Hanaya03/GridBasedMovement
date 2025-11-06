@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterSelection : BTurnItems<ETurnItems>
+public class CharacterSelection : BTurnItems
 {
     public CharacterSelection(ETurnItems stateKey, StateData Data) : base(stateKey, Data){}
     public override void OnLeftClick(){}

@@ -1,12 +1,12 @@
 using UnityEngine;
 using System;
 
-public abstract class BTurnItems<EState> where EState : Enum
+public abstract class BTurnItems
 {
     protected StateData Data{ get; set; }
-    public EState StateKey{get; private set;}
+    public ETurnItems StateKey{get; private set;}
 
-    public BTurnItems(EState key, StateData data)
+    public BTurnItems(ETurnItems key, StateData data)
     {
         StateKey = key;
         Data = data;
@@ -16,5 +16,5 @@ public abstract class BTurnItems<EState> where EState : Enum
     public abstract void EnterState();
     public abstract void ExitState();
     public abstract void UpdateState();
-    public abstract EState GetNextState();
+    public abstract ETurnItems GetNextState();
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Linq;
 
-public class PathSelection : BTurnItems<ETurnItems>
+public class PathSelection : BTurnItems
 {
     private Ray ray;
     private RaycastHit hit;
