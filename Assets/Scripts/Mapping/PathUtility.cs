@@ -3,20 +3,21 @@ using System.Collections.Generic;
 
 public class PathUtility
 {
-    public int[,] _map = new int[8, 8];
-    public Tile[,] _smap = new Tile[8, 8];
-    private Vector2 _source;
-    public Vector2 Source { get { return _source; } set { _source = value; } }
-    private int _pidx = 0;
-    private List<Vector2> _path = new List<Vector2>();
-    public List<Vector2> Path => _path;
+    private static int[,] _map = new int[8, 8];
+    public static int[,] Map{get{ return _map; } set{ _map = value; }}
+    private static Tile[,] _smap = new Tile[8, 8];
+    public static Tile[,] SMap { get { return _smap; } set { _smap = value; } }
+    public static List<Vector2> test = new List<Vector2> { Vector2.up, Vector2.down };
+    private static Vector2 _source;
+    public static Vector2 Source { get { return _source; } set { _source = value; } }
+    private static List<Vector2> _path = new List<Vector2>();
+    public static List<Vector2> Path => _path;
 
-    public void AddToPath(Vector2 target)
+    public static void CreatePath(Vector2 target)
     {
-        Debug.Log($"_source is {_source}, pidx = {_pidx}");
         Vector2 tmp = _source;
 
-        _path = AStarSearch.AStar(_map, _source, target);
+        _path.AddRange(AStarSearch.AStar(_map, _source, target));
 
         for (int v = 0; v < _path.Count; v++)
         {
@@ -24,16 +25,17 @@ public class PathUtility
         }
     }
     
-    public void ErasePathHighlights()
+    public static void ErasePathHighlights()
     {
         for (int v = 0; v < _path.Count; v++)
         {
             _smap[(int)_path[v].x, (int)_path[v].y].DehighlightPathTile();
         }
+        ClearPath();
     }
     
-    public void ClearPath()
+    public static void ClearPath()
     {
-        _pidx = 0;
+        _path.Clear();
     }
 }

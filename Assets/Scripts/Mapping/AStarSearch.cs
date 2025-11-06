@@ -38,21 +38,21 @@ public class AStarSearch
         // If the source or destination is out of range
         if (!IsValid(src.x, src.y, ROW, COL) || !IsValid(dest.x, dest.y, ROW, COL))
         {
-            Debug.Log("Source or destination is invalid");
+            // Debug.Log("Source or destination is invalid");
             return null;
         }
 
         // Either the source or the destination is blocked
         if (!IsUnBlocked(grid, src.x, src.y) || !IsUnBlocked(grid, dest.x, dest.y))
         {
-            Debug.Log("Source or the destination is blocked");
+            // Debug.Log("Source or the destination is blocked");
             return null;
         }
 
         // If the destination cell is the same as the source cell
         if (src.x == dest.x && src.y == dest.y)
         {
-            Debug.Log("We are already at the destination");
+            // Debug.Log("We are already at the destination");
             return null;
         }
 
@@ -144,7 +144,7 @@ public class AStarSearch
                     {
                         cellDetails[newX, newY].parent_i = x;
                         cellDetails[newX, newY].parent_j = y;
-                        Debug.Log("The destination cell is found");
+                        // Debug.Log("The destination cell is found");
                         foundDest = true;
                         return TracePath(cellDetails, dest);
                     }
@@ -182,8 +182,8 @@ public class AStarSearch
         // reach the destination cell. This may happen when the
         // there is no way to destination cell (due to
         // blockages)
-        if (!foundDest)
-            Debug.Log("Failed to find the Destination Cell");
+        // if (!foundDest)
+            // Debug.Log("Failed to find the Destination Cell");
         return null;
     }
 
@@ -235,10 +235,9 @@ public class AStarSearch
             col = temp_col;
         }
 
-        path.Add(new Vector2(row, col));
         path.Reverse();
 
-        Debug.Log($"Path found with {path.Count} steps");
+        // Debug.Log($"Path found with {path.Count} steps");
         return path;
     }
 }
