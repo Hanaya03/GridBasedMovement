@@ -3,25 +3,25 @@ using System.Linq;
 
 public class PathSelection : BTurnItems
 {
-    private Ray ray;
-    private RaycastHit hit;
+    private int _stepsAvailable;
     public PathSelection(ETurnItems stateKey, StateData Data) : base(stateKey, Data){}
 
     public override void OnLeftClick()
     {
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, Data.GroundLayer))
+        if (Physics.Raycast(Data.ray, out Data.hit, Mathf.Infinity, Data.GroundLayer))
         {
-            Vector2 tar = (Vector2)hit.transform.position;
+            Vector2 tar = (Vector2)Data.hit.transform.position;
             if (Data.TargetUnit.Path.Count > 0)
             {
                 if (tar == Data.TargetUnit.Path.Last())
                 {
                     Data.TargetUnit.FollowPath();
+                    _nextState = ETurnItems.Waiting;
                 }
                 else
                 {
                     Data.TargetUnit.Path.AddRange(PathUtility.Path);
+                    _stepsAvailable -= PathUtility.Path.Count;
                     PathUtility.Source = Data.TargetUnit.Path.Last();
                     PathUtility.Path.Clear();
                 }
@@ -29,23 +29,31 @@ public class PathSelection : BTurnItems
             else
             {
                 Data.TargetUnit.Path.AddRange(PathUtility.Path);
+                _stepsAvailable -= PathUtility.Path.Count;
                 PathUtility.Source = Data.TargetUnit.Path.Last();
                 PathUtility.Path.Clear();
             }
         }
     }
-    public override void EnterState(){}
-    public override void ExitState(){}
+    public override void EnterState()
+    {
+        PathUtility.Source = (Vector2)Data.TargetUnit.transform.position;
+        _stepsAvailable = Data.TargetUnit.MoveDistance;
+    }
+    public override void ExitState()
+    {
+        Data.TargetUnit = null;
+    }
     public override void UpdateState()
     {
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, Data.GroundLayer))
+        Data.ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(Data.ray, out Data.hit, Mathf.Infinity, Data.GroundLayer))
         {
-            Vector2 tar = (Vector2)hit.transform.position;
+            Vector2 tar = (Vector2)Data.hit.transform.position;
             if (tar == PathUtility.Source)
                 return;
 
-            if (tar.x + tar.y > Data.TargetUnit.MoveDistance)
+            if (Mathf.Abs(tar.x - PathUtility.Source.x) + Mathf.Abs(tar.y - PathUtility.Source.y) > _stepsAvailable)
             {
                 PathUtility.ErasePathHighlights();
                 return;
@@ -71,5 +79,5 @@ public class PathSelection : BTurnItems
 
         }
     }
-    public override ETurnItems GetNextState(){ return StateKey; }
+    public override ETurnItems GetNextState(){ return _nextState; }
 }

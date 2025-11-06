@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0b59f6b1a499fd543a7d214cb9584bc4
+guid: fce6a1a38e343234690bec183c9bcd98
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,23 +110,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: painwheel_1
+      name: selection_3
       rect:
         serializedVersion: 2
-        x: 79
-        y: 29
-        width: 807
-        height: 879
+        x: 0
+        y: 0
+        width: 720
+        height: 720
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c63a48af4aa50441a6f35474873f697
-      internalID: -1675243631
+      spriteID: 6b77dcd4b5d9e3f488254f55342b06aa
+      internalID: 359047126
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0955700d5fbee2547b2e0f9b08a82b95
+    spriteID: 239a7aa8a311e98479ed9c22171b2eec
     internalID: 0
     vertices: []
     indices: 
@@ -145,8 +145,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      painwheel_0: -1745813736
-      painwheel_1: -1675243631
+      selection_0: -1726681507
+      selection_1: 2139808819
+      selection_2: -1361842468
+      selection_3: 359047126
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

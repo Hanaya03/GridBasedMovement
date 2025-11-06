@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Map = ENV.Map;
 
 public enum ETurn
 {
@@ -15,12 +16,14 @@ public enum ETurnItems
     CharacterSelection,
     ActionSelection,
     PathSelection,
+    TargetSelection,
     Waiting
 }
 
 public class TileSelector : MonoBehaviour
 {
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private LayerMask _unitLayer;
     [SerializeField] private Map _grid;
     private Dictionary<ETurnItems, BTurnItems> _states = new Dictionary<ETurnItems, BTurnItems>();
     private BTurnItems _currentState;
@@ -52,11 +55,11 @@ public class TileSelector : MonoBehaviour
 
     private void Awake()
     {
-        StateData _data = new StateData(groundLayer, _grid);
+        StateData _data = new StateData(_groundLayer, _unitLayer, _grid);
 
         _states.Add(ETurnItems.CharacterSelection, new CharacterSelection(ETurnItems.CharacterSelection, _data));
         _states.Add(ETurnItems.ActionSelection, new ActionSelection(ETurnItems.ActionSelection, _data));
-        _states.Add(ETurnItems.PathSelection, new PathSelection(ETurnItems.CharacterSelection, _data));
+        _states.Add(ETurnItems.PathSelection, new PathSelection(ETurnItems.PathSelection, _data));
         _states.Add(ETurnItems.Waiting, new Waiting(ETurnItems.Waiting, _data));
 
         _currentState = _states[ETurnItems.CharacterSelection];

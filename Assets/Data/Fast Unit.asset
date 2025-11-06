@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 720ef96a3db601d46920993fe3417e84, type: 3}
-  m_Name: Basic Unit
+  m_Name: Fast Unit
   m_EditorClassIdentifier: 
-  _maxMoveSpeed: 5
-  _maxHealth: 5
+  _maxMoveSpeed: 6
+  _maxHealth: 4

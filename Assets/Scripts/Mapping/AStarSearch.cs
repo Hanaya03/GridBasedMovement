@@ -114,7 +114,6 @@ public class AStarSearch
 
         // We set this boolean value as false as initially
         // the destination is not reached.
-        bool foundDest = false;
 
         while (openList.Count > 0)
         {
@@ -145,7 +144,6 @@ public class AStarSearch
                         cellDetails[newX, newY].parent_i = x;
                         cellDetails[newX, newY].parent_j = y;
                         // Debug.Log("The destination cell is found");
-                        foundDest = true;
                         return TracePath(cellDetails, dest);
                     }
 
@@ -182,7 +180,6 @@ public class AStarSearch
         // reach the destination cell. This may happen when the
         // there is no way to destination cell (due to
         // blockages)
-        // if (!foundDest)
             // Debug.Log("Failed to find the Destination Cell");
         return null;
     }
