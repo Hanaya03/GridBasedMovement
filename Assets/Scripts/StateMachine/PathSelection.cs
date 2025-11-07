@@ -42,7 +42,6 @@ public class PathSelection : BTurnItems
     }
     public override void ExitState()
     {
-        Data.TargetUnit = null;
     }
     public override void UpdateState()
     {

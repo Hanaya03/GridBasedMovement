@@ -6,7 +6,7 @@ public abstract class BTurnItems
     protected StateData Data{ get; set; }
     public ETurnItems StateKey { get; private set; }
     protected ETurnItems _nextState;
-    
+
 
     public BTurnItems(ETurnItems key, StateData data)
     {
@@ -14,6 +14,8 @@ public abstract class BTurnItems
         _nextState = key;
         Data = data;
     }
+    
+    public void ResetStateKey(){_nextState = StateKey;}
 
     public abstract void OnLeftClick();
     public abstract void EnterState();

@@ -10,10 +10,16 @@ public class Waiting : BTurnItems
     {
         Debug.Log("Now in waiting state");
     }
-    public override void ExitState(){}
+    public override void ExitState()
+    {
+        Debug.Log("Done waiting!");
+        Data.TargetUnit = null;
+    }
     public override void UpdateState()
     {
         Debug.Log("Waiting...");
+        if (Data.TargetUnit.DoneMoving)
+            _nextState = ETurnItems.CharacterSelection;
     }
-    public override ETurnItems GetNextState(){ return StateKey; }
+    public override ETurnItems GetNextState(){ return _nextState; }
 }

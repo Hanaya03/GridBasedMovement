@@ -11,12 +11,11 @@ public class CharacterSelection : BTurnItems
         {
             _unit = _currentObject.GetComponent<UnitController>();
             Data.TargetUnit = _unit;
-            _nextState = ETurnItems.PathSelection;
+            _nextState = ETurnItems.ActionSelection;
         }
     }
     public override void EnterState()
     {
-        _nextState = StateKey;
     }
     public override void ExitState(){}
     public override void UpdateState()

@@ -6,7 +6,8 @@ using Map = ENV.Map;
 public class UnitController : MonoBehaviour
 {
     private List<Vector2> _path = new List<Vector2>();
-    public List<Vector2> Path{get{ return _path; } set{ _path = value; }}
+    public List<Vector2> Path { get { return _path; } set { _path = value; } }
+    public bool DoneMoving = true;
     [SerializeField] private UnitData _data;
     [SerializeField] private float _stepTime = .2f;
     [SerializeField] private ENV.Map _grid;
@@ -27,6 +28,7 @@ public class UnitController : MonoBehaviour
 
     public void FollowPath()
     {
+        DoneMoving = false;
         StartCoroutine(TakeSteps(_path));
     }
     
@@ -41,5 +43,7 @@ public class UnitController : MonoBehaviour
             _grid.SMap[(int)transform.position.x, (int)transform.position.y].DehighlightPathTile();
         }
         PathUtility.ClearPath();
+        _path.Clear();
+        DoneMoving = true;
     }
 }
