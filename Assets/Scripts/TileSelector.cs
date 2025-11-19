@@ -68,6 +68,8 @@ public class TileSelector : MonoBehaviour
         _states.Add(ETurnItems.TargetSelection, new TargetSelection(ETurnItems.TargetSelection, _data));
         _states.Add(ETurnItems.Waiting, new Waiting(ETurnItems.Waiting, _data));
 
+        _states[ETurnItems.TargetSelection].OnAwake();
+
         _currentState = _states[ETurnItems.CharacterSelection];
         
         PathUtility.Map = _grid.map;

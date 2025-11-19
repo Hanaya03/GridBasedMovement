@@ -1,14 +1,14 @@
 using UnityEngine;
 using System;
 
-public abstract class BTurnItems
+public abstract class BAttackItems
 {
-    protected StateData Data{ get; set; }
-    public ETurnItems StateKey { get; private set; }
-    protected ETurnItems _nextState;
+    protected AttackStateData Data{ get; set; }
+    public EAttackType StateKey { get; private set; }
+    protected EAttackType _nextState;
 
 
-    public BTurnItems(ETurnItems key, StateData data)
+    public BAttackItems(EAttackType key, AttackStateData data)
     {
         StateKey = key;
         _nextState = key;
@@ -21,5 +21,5 @@ public abstract class BTurnItems
     public abstract void EnterState();
     public abstract void ExitState();
     public abstract void UpdateState();
-    public abstract ETurnItems GetNextState();
+    public abstract EAttackType GetNextState();
 }

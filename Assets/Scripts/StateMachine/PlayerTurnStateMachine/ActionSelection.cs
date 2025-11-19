@@ -24,6 +24,7 @@ public class ActionSelection : BTurnItems
 
     public void TransitionToAtk()
     {
+        Data.TargetUnit.SelectAttack(0);
         _nextState = ETurnItems.TargetSelection;
     }
     

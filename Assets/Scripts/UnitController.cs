@@ -12,18 +12,33 @@ public class UnitController : MonoBehaviour
     [SerializeField] private float _stepTime = .2f;
     [SerializeField] private ENV.Map _grid;
 
+    private int _currentHealth;
+
+    public Vector2 Position => gameObject.transform.position;
+
     public int MoveDistance => _data.MOVE;
+    public AttackData CurrentAttack => _data.CurrentAttack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        _currentHealth = _data.HEALTH;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
 
+    }
+
+    public void SelectAttack(int idx)
+    {
+        _data.CurrentAttack = _data.ATTACKS[idx];
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        _currentHealth -= dmg;
     }
 
     public void FollowPath()
