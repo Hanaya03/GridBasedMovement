@@ -16,8 +16,12 @@ public class UnitController : MonoBehaviour
 
     public Vector2 Position => gameObject.transform.position;
 
+    public AttackData[] Attacks => _data.ATTACKS;
+
     public int MoveDistance => _data.MOVE;
-    public AttackData CurrentAttack => _data.CurrentAttack;
+
+    private AttackData _currentAttack;
+    public AttackData CurrentAttack => _currentAttack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,12 +37,13 @@ public class UnitController : MonoBehaviour
 
     public void SelectAttack(int idx)
     {
-        _data.CurrentAttack = _data.ATTACKS[idx];
+        _currentAttack = _data.ATTACKS[idx];
     }
 
     public void TakeDamage(int dmg)
     {
         _currentHealth -= dmg;
+        Debug.Log($"{gameObject.name} took {dmg} point(s) of damage. Now has {_currentHealth} health.");
     }
 
     public void FollowPath()

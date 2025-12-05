@@ -28,6 +28,7 @@ public class TileSelector : MonoBehaviour
     [SerializeField] private Map _grid;
     [SerializeField] private GameObject _actionButton;
     [SerializeField] private GameObject _moveButton;
+    [SerializeField] private GameObject[] _attackButtons;
     private Dictionary<ETurnItems, BTurnItems> _states = new Dictionary<ETurnItems, BTurnItems>();
     private ETurnItems nextStateKey;
     private BTurnItems _currentState;
@@ -60,7 +61,7 @@ public class TileSelector : MonoBehaviour
 
     private void Awake()
     {
-        StateData _data = new StateData(_groundLayer, _unitLayer, _grid, _actionButton, _moveButton);
+        StateData _data = new StateData(_groundLayer, _unitLayer, _grid, _actionButton, _moveButton, _attackButtons);
 
         _states.Add(ETurnItems.CharacterSelection, new CharacterSelection(ETurnItems.CharacterSelection, _data));
         _states.Add(ETurnItems.ActionSelection, new ActionSelection(ETurnItems.ActionSelection, _data));

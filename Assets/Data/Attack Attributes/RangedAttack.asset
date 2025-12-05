@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 720ef96a3db601d46920993fe3417e84, type: 3}
-  m_Name: Basic Unit
+  m_Script: {fileID: 11500000, guid: cd12a9d56d07ed6499abb45d37f477a2, type: 3}
+  m_Name: RangedAttack
   m_EditorClassIdentifier: 
-  _maxMoveSpeed: 3
-  _maxHealth: 3
-  _attackList:
-  - {fileID: 11400000, guid: 5b5952a43f6fc0d48a6857818d8304d3, type: 2}
-  - {fileID: 11400000, guid: 8aa8f757b3641df469a70ca318f0e84d, type: 2}
+  _name: 
+  _range: 3
+  _damage: 1
+  _type: 0

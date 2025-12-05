@@ -9,5 +9,5 @@ public class Area : BAttackItems
     public override void EnterState(){}
     public override void ExitState(){}
     public override void UpdateState(){}
-    public override EAttackType GetNextState(){return _nextState;}
+    public override EAttackType? GetNextState(){return _nextState;}
 }

@@ -8,7 +8,15 @@ public class Line : BAttackItems
     
     public override void OnLeftClick()
     {
+        Debug.Log("Left click in sub-state Line");
+        if (Physics.Raycast(Data.ray, out Data.hit, Mathf.Infinity, Data.UnitLayer))
+        {
+            UnitController _unit = _currentObject.GetComponent<UnitController>();
+            _unit.TakeDamage(Data.CurrentAttack.DAMAGE);
+            _nextState = null;
+        }
     }
+
     public override void EnterState()
     {
         Debug.Log("Entering Line state");
@@ -16,19 +24,23 @@ public class Line : BAttackItems
         for(int i = 0; i < Data.Identities.Length; i++)
         {
             tmp = Data.Identities[i];
-            Debug.Log($"Trying to iterate through identities, current identity {i} with tmp {tmp}");
-            Debug.Log($"Current attack range: {Data.CurrentAttack.RANGE}");
+            // Debug.Log($"Trying to iterate through identities, current identity {i} with tmp {tmp}");
+            // Debug.Log($"Current attack range: {Data.CurrentAttack.RANGE}");
 
             for (int x = 1; x <= Data.CurrentAttack.RANGE; x++)
             {
-                Debug.Log($"Trying to draw tile");
+                // Debug.Log($"Trying to draw tile");
                 try
                 {
                     Data.Grid.SMap[tmp.Item1 * x + (int)Data.TargetUnit.Position.x, tmp.Item2 * x + (int)Data.TargetUnit.Position.y].HighlightPathTile();
                 }
                 catch(IndexOutOfRangeException e)
                 {
-                    Debug.Log("invalid position");
+                    // Debug.Log("invalid position");
+                }
+                catch(NullReferenceException n)
+                {
+                    // Debug.Log("invalid position");
                 }
             }
         }
@@ -37,6 +49,31 @@ public class Line : BAttackItems
     public override void ExitState()
     {
         Debug.Log("Exiting the sub-state Line.");
+        (int, int) tmp;
+        for(int i = 0; i < Data.Identities.Length; i++)
+        {
+            tmp = Data.Identities[i];
+            // Debug.Log($"Trying to iterate through identities, current identity {i} with tmp {tmp}");
+
+            for (int x = 1; x <= Data.CurrentAttack.RANGE; x++)
+            {
+                // Debug.Log($"Trying to erase tile");
+                try
+                {
+                    Data.Grid.SMap[tmp.Item1 * x + (int)Data.TargetUnit.Position.x, 
+                                   tmp.Item2 * x + (int)Data.TargetUnit.Position.y].DehighlightPathTile();
+                }
+                catch(IndexOutOfRangeException e)
+                {
+                    // Debug.Log("invalid position");
+                }
+                catch(NullReferenceException n)
+                {
+                    // Debug.Log("invalid position");
+                }
+            }
+        }
+        
     }
     public override void UpdateState()
     {
@@ -54,5 +91,5 @@ public class Line : BAttackItems
             Data.Grid.SMap[(int)tar.x, (int)tar.y].TargetTile();
         }
     }
-    public override EAttackType GetNextState(){ return _nextState; }
+    public override EAttackType? GetNextState(){ return _nextState; }
 }

@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxMoveSpeed: 4
   _maxHealth: 2
+  CurrentAttack: {fileID: 0}
+  _attackList:
+  - {fileID: 11400000, guid: 5b5952a43f6fc0d48a6857818d8304d3, type: 2}

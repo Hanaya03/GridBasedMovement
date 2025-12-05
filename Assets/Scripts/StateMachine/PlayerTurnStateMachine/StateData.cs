@@ -15,6 +15,8 @@ public class StateData
 
     public GameObject ActionButtonGO;
     public GameObject MoveButtonGO;
+    public GameObject[] AttackButtonGOArr;
+    public Button[] AttackButtonArr = new Button[4];
     public Button ActionButton;
     public Button MoveButton;
 
@@ -22,14 +24,18 @@ public class StateData
     public Map Grid => _grid;
 
 
-    public StateData(LayerMask GroundLayer, LayerMask UnitLayer, Map Grid, GameObject AButton, GameObject MButton)
+    public StateData(LayerMask GroundLayer, LayerMask UnitLayer, Map Grid, GameObject AButton, GameObject MButton, GameObject[] ButtonArr)
     {
         _groundLayer = GroundLayer;
         _grid = Grid;
         _unitLayer = UnitLayer;
         ActionButtonGO = AButton;
         MoveButtonGO = MButton;
+        AttackButtonGOArr = ButtonArr;
         ActionButton = ActionButtonGO.GetComponent<Button>();
         MoveButton = MoveButtonGO.GetComponent<Button>();
+
+        for(int i = 0; i < ButtonArr.Length; i++)
+            AttackButtonArr[i] = AttackButtonGOArr[i].GetComponent<Button>();
     }
 }
