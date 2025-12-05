@@ -44,6 +44,13 @@ public class UnitController : MonoBehaviour
     {
         _currentHealth -= dmg;
         Debug.Log($"{gameObject.name} took {dmg} point(s) of damage. Now has {_currentHealth} health.");
+        if(_currentHealth <= 0)
+            OnDeath();
+    }
+
+    private void OnDeath()
+    {
+        Destroy(gameObject);
     }
 
     public void FollowPath()
