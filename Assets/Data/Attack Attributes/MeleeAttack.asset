@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd12a9d56d07ed6499abb45d37f477a2, type: 3}
   m_Name: MeleeAttack
   m_EditorClassIdentifier: 
+  _name: Kick
   _range: 1
-  _damage: 1
+  _damage: 2
   _type: 0

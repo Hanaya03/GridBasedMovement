@@ -15,8 +15,8 @@ public class PathSelection : BTurnItems
             {
                 if (tar == Data.TargetUnit.Path.Last())
                 {
-                    Data.TargetUnit.FollowPath();
-                    _nextState = ETurnItems.Waiting;
+                    Data.TargetUnit.FollowPath(()=>{_nextState = ETurnItems.Waiting;});
+                    // _nextState = ETurnItems.Waiting;
                 }
                 else
                 {

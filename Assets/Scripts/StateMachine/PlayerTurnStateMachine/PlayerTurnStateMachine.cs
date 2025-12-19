@@ -6,12 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Map = ENV.Map;
 
-public enum ETurn
-{
-    PlayerTurn,
-    EnemyTurn
-}
-
 public enum ETurnItems
 {
     CharacterSelection,
@@ -21,7 +15,7 @@ public enum ETurnItems
     Waiting
 }
 
-public class TileSelector : MonoBehaviour
+public class PlayerTurnStateMachine : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private LayerMask _unitLayer;
@@ -31,12 +25,13 @@ public class TileSelector : MonoBehaviour
     [SerializeField] private GameObject[] _attackButtons;
     private Dictionary<ETurnItems, BTurnItems> _states = new Dictionary<ETurnItems, BTurnItems>();
     private ETurnItems nextStateKey;
+    public ETurnItems NextStateKey => nextStateKey;
     private BTurnItems _currentState;
     private bool _inTransitioningState = false;
     private InputSystem_Actions controls;
     private InputAction _enter;
 
-    void Update()
+    public void OnUpdate()
     {
         nextStateKey = _currentState.GetNextState();
 

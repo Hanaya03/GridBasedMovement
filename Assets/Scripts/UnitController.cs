@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Map = ENV.Map;
@@ -53,13 +54,13 @@ public class UnitController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void FollowPath()
+    public void FollowPath(Action callback)
     {
         DoneMoving = false;
-        StartCoroutine(TakeSteps(_path));
+        StartCoroutine(TakeSteps(_path, callback));
     }
     
-    IEnumerator TakeSteps(List<Vector2> steps)
+    IEnumerator TakeSteps(List<Vector2> steps, Action callback)
     {
         _grid.SMap[(int)transform.position.x, (int)transform.position.y].DeHighlightUnit();
         for (int i = 0; i < steps.Count; i++)
@@ -72,5 +73,22 @@ public class UnitController : MonoBehaviour
         PathUtility.ClearPath();
         _path.Clear();
         DoneMoving = true;
+        callback?.Invoke();
     }
+
+    public IEnumerator FollowThePath(Action callback)
+    {
+        _grid.SMap[(int)transform.position.x, (int)transform.position.y].DeHighlightUnit();
+        for (int i = 0; i < _path.Count; i++)
+        {
+            yield return new WaitForSeconds(_stepTime);
+            Debug.Log("taking step");
+            transform.position = (Vector3)_path[i] + Vector3.forward;
+            _grid.SMap[(int)transform.position.x, (int)transform.position.y].DehighlightPathTile();
+        }
+        PathUtility.ClearPath();
+        _path.Clear();
+        callback?.Invoke();
+    }
+
 }
