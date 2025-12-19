@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class UnitList : MonoBehaviour
 {
     [SerializeField] private GameObject[] _unitGOArr;
+    public GameObject[] UnitGOArr => _unitGOArr;
     private Dictionary<string, UnitController> _units = new Dictionary<string, UnitController>();
 
     void Start()
@@ -12,4 +13,7 @@ public class UnitList : MonoBehaviour
             _units.Add(g.name, g.GetComponent<UnitController>());
     }
 
+    public UnitController GetUnit(int i){
+        return _units[_unitGOArr[i].name];
+    }
 }

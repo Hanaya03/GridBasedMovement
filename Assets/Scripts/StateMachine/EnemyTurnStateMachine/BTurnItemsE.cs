@@ -3,7 +3,7 @@ using System;
 
 public abstract class BTurnItemsE
 {
-    protected StateDataE Data{ get; set; }
+    protected StateDataE _data{ get; set; }
     public ETurnItems StateKey { get; private set; }
     protected ETurnItems _nextState;
 
@@ -12,7 +12,7 @@ public abstract class BTurnItemsE
     {
         StateKey = key;
         _nextState = key;
-        Data = data;
+        _data = data;
     }
     public virtual void OnAwake(){}
     public void ResetStateKey(){_nextState = StateKey;}

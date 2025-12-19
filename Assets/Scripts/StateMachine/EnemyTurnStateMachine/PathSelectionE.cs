@@ -21,7 +21,9 @@ public class PathSelectionE : BTurnItemsE
     public override void ExitState()
     {
     }
-    public override void UpdateState() { }
+    public override void UpdateState() {
+        Debug.Log("in enemy path selection state");
+    }
     
     public override ETurnItems GetNextState(){ return _nextState; }
 }

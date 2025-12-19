@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "edgy game.sln"
+    "dotnet.defaultSolution": "GridBasedMovement.sln"
 }
